@@ -1,20 +1,46 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-const atob = require('atob');
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const { execSync } = require('child_process');
-let jwt = require('jsonwebtoken');
-let config = require('./config');
-let middleware = require('./middleware');
-var cookieParser = require('cookie-parser');
+var mysql = require('mysql')
 
-var options = {
-	  key: key,
-	  cert: cert
-};
+var con = mysql.createConnection({
+	  host: "localhost",
+	  user: "ohud",
+	  password: "1234567890",
+    database: 'ITEA'
+});
+
+con.connect(function(err) {
+	  if (err) throw err;
+	  console.log("Connected!");
+});
 
 class HandlerGenerator {
-	  login_new (req, res) {
-		      let valid;
+  async get_modules_count (req, res) {
+    let count;
+    let query = 'SELECT * FROM my_modules'
+    count = await con.query(query, (err, rows) => {
+      if(err) throw err;  
+      res.json({
+        count: rows.length
+      });
+    });
+  }
+}
+
+function main () {
+	let app = express();
+  let handlers = new HandlerGenerator();
+	const port = process.env.PORT || 8000;
+  // app.use(function (req, res, next){
+  // res.header('Access-Control-Allow-Origin', '*');
+  // res.header('Access-Control-Allow-Headers', '*');
+  // res.header('Access-Control-Allow-Credentials', 'true');
+  //})
+  app.get('/get_modules_count', handlers.get_modules_count);
+	var server = http.createServer(app);
+	server.listen(port, () => console.log(`Server is listening on port: ${port}`));
+}
+
+main();
