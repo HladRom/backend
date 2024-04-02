@@ -1,4 +1,4 @@
-# Introduction :star: :star: 
+# Introduction :star: :star:  
 The aim of this project is to develop a web application using Docker, NGINX, Node.js, and MySQL technologies. The tasks include installing and configuring the MySQL database, creating a table to store data about the technologies used in the project, configuring the backend to connect to the database, fixing the frontend to interact with the backend through an API, building the project, and deploying it using Docker containers.
 
 ## Steps Overview
